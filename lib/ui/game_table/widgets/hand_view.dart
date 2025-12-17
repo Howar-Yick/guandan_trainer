@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/providers/game_providers.dart';
 import '../../../domain/engine/actions.dart';
 import '../../../domain/enums/seat.dart';
+import '../../../domain/enums/suit.dart';
+import '../../common/card_display.dart';
 
 class HandView extends ConsumerWidget {
   final Seat seat;
@@ -28,8 +30,8 @@ class HandView extends ConsumerWidget {
               onTap: () => notifier.dispatch(ToggleSelectCardAction(c.id)),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 100),
-                width: 54,
-                height: 80,
+                width: 58,
+                height: 86,
                 decoration: BoxDecoration(
                   border: Border.all(width: 2),
                   borderRadius: BorderRadius.circular(8),
@@ -37,9 +39,15 @@ class HandView extends ConsumerWidget {
                 margin: EdgeInsets.only(top: selected ? 0 : 14),
                 child: Center(
                   child: Text(
-                    '${c.suit.name[0].toUpperCase()}-${c.rank.name}',
+                    displayText(c, levelRank: s.levelRank),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 10),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: c.suit == Suit.heart || c.suit == Suit.diamond
+                          ? Colors.red
+                          : Colors.black,
+                    ),
                   ),
                 ),
               ),
