@@ -111,8 +111,6 @@ class WildcardResolver {
     Rank.ace,
   ];
 
-  int _seqIndex(Rank r) => _seqRanks.indexOf(r);
-
   List<List<Rank>> _allStraight5() {
     // 2..10 共 9 组
     final res = <List<Rank>>[];

@@ -125,7 +125,7 @@ class HandAnalyzer {
 
     // 三带二（5张：3+2）
     if (sorted.length == 5 && byRank.length == 2) {
-      final groups = byRank.entries.map((e) => e.value.length).sorted();
+      final groups = byRank.entries.map((e) => e.value.length).sorted((a, b) => a.compareTo(b));
       if (groups[0] == 2 && groups[1] == 3) {
         final tripleRank = byRank.entries.firstWhere((e) => e.value.length == 3).key;
         return ResolvedPlay(

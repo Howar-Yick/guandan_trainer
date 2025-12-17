@@ -1,5 +1,3 @@
-import 'package:collection/collection.dart';
-
 import '../cards/deck.dart';
 import '../config/rule_config.dart';
 import '../enums/phase.dart';
