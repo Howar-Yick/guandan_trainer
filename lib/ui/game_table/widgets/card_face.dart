@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../domain/cards/card.dart';
@@ -28,11 +30,11 @@ class _CardFacePainter extends CustomPainter {
     final radius = Radius.circular(size.shortestSide * 0.08);
     final rrect = RRect.fromRectAndRadius(rect, radius);
 
-    final backgroundPaint = Paint()..color = Colors.white;
+    final backgroundPaint = Paint()..color = const Color(0xFFFDFCF9);
     final borderPaint = Paint()
-      ..color = Colors.black87
+      ..color = const Color(0xFF3D3A36)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = size.shortestSide * 0.04;
+      ..strokeWidth = size.shortestSide * 0.035;
 
     canvas.drawRRect(rrect, backgroundPaint);
     canvas.drawRRect(rrect, borderPaint);
@@ -44,25 +46,27 @@ class _CardFacePainter extends CustomPainter {
 
     final suitColor = _suitColor(card);
     final cornerInset = size.shortestSide * 0.08;
-    final cornerSize = Size(size.width * 0.18, size.height * 0.18);
+    final cornerSize = Size(size.width * 0.2, size.height * 0.2);
 
     _drawRankCorner(
       canvas,
       Offset(cornerInset, cornerInset),
       cornerSize,
       suitColor,
-      alignRight: false,
     );
 
+    canvas.save();
+    canvas.translate(size.width, size.height);
+    canvas.rotate(math.pi);
     _drawRankCorner(
       canvas,
-      Offset(size.width - cornerInset - cornerSize.width, size.height - cornerInset - cornerSize.height),
+      Offset(cornerInset, cornerInset),
       cornerSize,
       suitColor,
-      alignRight: true,
     );
+    canvas.restore();
 
-    final centerSize = Size(size.width * 0.4, size.height * 0.4);
+    final centerSize = Size(size.width * 0.46, size.height * 0.46);
     final centerOffset = Offset(
       (size.width - centerSize.width) / 2,
       (size.height - centerSize.height) / 2,
@@ -72,8 +76,8 @@ class _CardFacePainter extends CustomPainter {
 
   void _drawJoker(Canvas canvas, Size size) {
     final isBig = card.rank == Rank.bigJoker;
-    final color = isBig ? Colors.redAccent : Colors.black87;
-    final label = isBig ? 'JOKER' : 'joker';
+    final color = isBig ? const Color(0xFFD4433C) : const Color(0xFF2F2D2B);
+    final label = isBig ? 'JOKER' : 'Joker';
 
     final textPainter = TextPainter(
       text: TextSpan(
@@ -81,7 +85,8 @@ class _CardFacePainter extends CustomPainter {
         style: TextStyle(
           color: color,
           fontWeight: FontWeight.bold,
-          fontSize: size.shortestSide * 0.22,
+          letterSpacing: 1.2,
+          fontSize: size.shortestSide * 0.2,
         ),
       ),
       textAlign: TextAlign.center,
@@ -99,9 +104,8 @@ class _CardFacePainter extends CustomPainter {
     Canvas canvas,
     Offset offset,
     Size size,
-    Color color, {
-    required bool alignRight,
-  }) {
+    Color color,
+  ) {
     final rankText = _rankLabel(card.rank);
     final rankPainter = TextPainter(
       text: TextSpan(
@@ -109,17 +113,14 @@ class _CardFacePainter extends CustomPainter {
         style: TextStyle(
           color: color,
           fontWeight: FontWeight.w700,
-          fontSize: size.height * 0.48,
+          fontSize: size.height * 0.52,
         ),
       ),
-      textAlign: alignRight ? TextAlign.right : TextAlign.left,
+      textAlign: TextAlign.left,
       textDirection: TextDirection.ltr,
     )..layout(maxWidth: size.width);
 
-    final rankOffset = alignRight
-        ? Offset(offset.dx + size.width - rankPainter.width, offset.dy)
-        : offset;
-    rankPainter.paint(canvas, rankOffset);
+    rankPainter.paint(canvas, offset);
 
     final suitRect = Rect.fromLTWH(
       offset.dx,
@@ -220,12 +221,12 @@ class _CardFacePainter extends CustomPainter {
     switch (card.suit) {
       case Suit.heart:
       case Suit.diamond:
-        return Colors.redAccent;
+        return const Color(0xFFD4433C);
       case Suit.spade:
       case Suit.club:
-        return Colors.black87;
+        return const Color(0xFF2F2D2B);
       case Suit.joker:
-        return card.rank == Rank.bigJoker ? Colors.redAccent : Colors.black87;
+        return card.rank == Rank.bigJoker ? const Color(0xFFD4433C) : const Color(0xFF2F2D2B);
     }
   }
 
